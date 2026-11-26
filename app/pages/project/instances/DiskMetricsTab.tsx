@@ -18,6 +18,7 @@ import {
 } from '@oxide/api'
 import { Storage24Icon } from '@oxide/design-system/icons/react'
 
+
 import {
   MetricCollection,
   MetricHeader,
@@ -32,6 +33,7 @@ import { TableEmptyBox } from '~/ui/lib/Table'
 
 import type { Route } from './+types/DiskMetricsTab'
 import { useMetricsContext } from './common'
+import { RefreshButton } from '~/components/RefreshButton'
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const { project, instance } = params
@@ -70,7 +72,7 @@ export default function DiskMetricsTab() {
 
 /** Only rendered if there is at least one disk in the list */
 function DiskMetrics({ disks, instance }: { disks: Disk[]; instance: Instance }) {
-  const { startTime, endTime, dateTimeRangePicker } = useMetricsContext()
+  const { startTime, endTime, dateTimeRangePicker,refreshMetrics } = useMetricsContext()
 
   const diskItems = useMemo(
     () => [
@@ -98,7 +100,7 @@ function DiskMetrics({ disks, instance }: { disks: Disk[]; instance: Instance })
   return (
     <>
       <MetricHeader>
-        <div className="max-1000:w-full flex gap-2">
+        <div className="max-1000:w-full flex gap-8 items-center">
           <Listbox
             className="max-1000:w-full w-52"
             aria-label="Choose disk"
@@ -107,6 +109,7 @@ function DiskMetrics({ disks, instance }: { disks: Disk[]; instance: Instance })
             items={diskItems}
             onChange={(value) => setSelectedDisk(value)}
           />
+          <RefreshButton onClick={refreshMetrics}/>
         </div>
         {dateTimeRangePicker}
       </MetricHeader>

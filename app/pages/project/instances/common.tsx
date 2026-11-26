@@ -40,6 +40,7 @@ type MetricsContextValue = {
   dateTimeRangePicker: ReactNode
   intervalPicker: ReactNode
   setIsIntervalPickerEnabled: (enabled: boolean) => void
+  refreshMetrics : () => Promise<unknown>
 }
 
 /**

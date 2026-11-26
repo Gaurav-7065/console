@@ -20,6 +20,7 @@ import { useInstanceSelector } from '~/hooks/use-params'
 import { Listbox } from '~/ui/lib/Listbox'
 
 import { useMetricsContext } from './common'
+import { RefreshButton } from '~/components/RefreshButton'
 
 type CpuChartType = OxqlVcpuState | 'all'
 
@@ -36,7 +37,7 @@ export default function CpuMetricsTab() {
     q(api.instanceView, { path: { instance }, query: { project } })
   )
 
-  const { startTime, endTime, dateTimeRangePicker } = useMetricsContext()
+  const { startTime, endTime, dateTimeRangePicker,refreshMetrics } = useMetricsContext()
 
   const queryBase = {
     unit: '%' as const,
@@ -62,7 +63,7 @@ export default function CpuMetricsTab() {
   return (
     <>
       <MetricHeader>
-        <div className="max-1000:w-full flex gap-2">
+        <div className="max-1000:w-full flex gap-8 items-center">
           <Listbox
             className="max-1000:w-full w-52"
             aria-label="Choose state"
@@ -71,6 +72,8 @@ export default function CpuMetricsTab() {
             items={stateItems}
             onChange={(value) => setSelectedState(value)}
           />
+
+          <RefreshButton onClick={refreshMetrics}/>
         </div>
         {dateTimeRangePicker}
       </MetricHeader>

@@ -14,6 +14,7 @@ import { useIntervalPicker } from '~/components/RefetchIntervalPicker'
 import { RouteTabs, Tab } from '~/components/RouteTabs'
 import { useInstanceSelector } from '~/hooks/use-params'
 import { pb } from '~/util/path-builder'
+import { queryClient } from '@oxide/api'
 
 import { MetricsContext } from './common'
 
@@ -43,6 +44,11 @@ export default function MetricsTab() {
     fn: () => onRangeChange(preset),
   })
 
+  // refreshMetrics is used to trigger a refetch of the metrics data when the user click on the refresh button.
+  const refreshMetrics=async () =>{
+    await queryClient.invalidateEndpoint('timeseriesQuery')
+  }
+
   // memoizing here would be redundant because the only things that cause a
   // render are these values, which would all be in the dep array anyway
   const context = {
@@ -51,6 +57,7 @@ export default function MetricsTab() {
     dateTimeRangePicker,
     intervalPicker,
     setIsIntervalPickerEnabled,
+    refreshMetrics
   }
 
   // Find the relevant <Outlet> in RouteTabs

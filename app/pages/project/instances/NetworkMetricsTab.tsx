@@ -28,6 +28,7 @@ import { EmptyMessage } from '~/ui/lib/EmptyMessage'
 import { Listbox } from '~/ui/lib/Listbox'
 import { TableEmptyBox } from '~/ui/lib/Table'
 import { ALL_ISH } from '~/util/consts'
+import { RefreshButton } from '~/components/RefreshButton'
 
 import type { Route } from './+types/NetworkMetricsTab'
 import { useMetricsContext } from './common'
@@ -72,7 +73,7 @@ function NetworkMetrics({ nics }: { nics: InstanceNetworkInterface[] }) {
   const { data: instanceData } = usePrefetchedQuery(
     q(api.instanceView, { path: { instance }, query: { project } })
   )
-  const { startTime, endTime, dateTimeRangePicker } = useMetricsContext()
+  const { startTime, endTime, dateTimeRangePicker,refreshMetrics } = useMetricsContext()
 
   const nicItems = useMemo(
     () => [
@@ -100,7 +101,7 @@ function NetworkMetrics({ nics }: { nics: InstanceNetworkInterface[] }) {
   return (
     <>
       <MetricHeader>
-        <div className="max-1000:w-full flex gap-2">
+        <div className="max-1000:w-full flex gap-8 items-center">
           <Listbox
             className="max-1000:w-full w-52"
             aria-label="Choose network interface"
@@ -109,6 +110,7 @@ function NetworkMetrics({ nics }: { nics: InstanceNetworkInterface[] }) {
             items={nicItems}
             onChange={(val) => setSelectedNic(val)}
           />
+          <RefreshButton onClick={refreshMetrics}/>
         </div>
         {dateTimeRangePicker}
       </MetricHeader>
